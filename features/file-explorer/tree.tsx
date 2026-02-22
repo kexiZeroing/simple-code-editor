@@ -3,6 +3,7 @@ import { FileIcon, FolderIcon } from "@react-symbols/icons/utils";
 import { ChevronRightIcon } from "lucide-react";
 import { useState } from "react";
 
+import { useEditor } from "@/features/editor/use-editor";
 import { getItemPadding } from "./constants";
 import { CreateInput } from "./create-input";
 import { RenameInput } from "./rename-input";
@@ -36,6 +37,8 @@ export const Tree = ({
     parentId: item.id,
     enabled: item.type === "folder" && isOpen,
   });
+
+  const { openFile, closeTab, activeTabId } = useEditor();
 
   const handleRename = (newName: string) => {
     setIsRenaming(false);
@@ -71,6 +74,7 @@ export const Tree = ({
 
   if (item.type === "file") {
     const fileName = item.name;
+    const isActive = activeTabId === item.id;
 
     if (isRenaming) {
       return (
@@ -88,9 +92,14 @@ export const Tree = ({
       <TreeItemWrapper
         item={item}
         level={level}
-        onClick={() => {}}
+        isActive={isActive}
+        onClick={() => openFile(item.id, { pinned: false })}
+        onDoubleClick={() => openFile(item.id, { pinned: true })}
         onRename={() => setIsRenaming(true)}
-        onDelete={() => deleteFile({ id: item.id })}
+        onDelete={() => {
+          closeTab(item.id);
+          deleteFile({ id: item.id });
+        }}
       >
         <FileIcon fileName={fileName} autoAssign className="size-4" />
         <span className="truncate text-sm">{fileName}</span>

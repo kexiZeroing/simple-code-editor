@@ -3,10 +3,10 @@
 import { cn } from "@/lib/utils";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-// import { EditorView } from "@/features/editor/components/editor-view";
-import { FileExplorer } from "./file-explorer";
+import { EditorView } from "@/features/editor/editor-view";
+import { FileExplorer } from "@/features/file-explorer";
 
 const MIN_SIDEBAR_WIDTH = 200;
 const MAX_SIDEBAR_WIDTH = 800;
@@ -37,6 +37,12 @@ const Tab = ({
 
 export const ProjectIdView = () => {
   const [activeView, setActiveView] = useState<"editor" | "preview">("editor");
+  const [mounted, setMounted] = useState(false);
+
+  // Prevents the stacking issue by waiting for the DOM to be ready before Allotment calculates dimensions.
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="h-full flex flex-col">
@@ -57,19 +63,21 @@ export const ProjectIdView = () => {
           "absolute inset-0",
           activeView === "editor" ? "visible" : "invisible"
         )}>
-          <Allotment defaultSizes={[DEFAULT_SIDEBAR_WIDTH, DEFAULT_MAIN_SIZE]}>
-            <Allotment.Pane
-              snap
-              minSize={MIN_SIDEBAR_WIDTH}
-              maxSize={MAX_SIDEBAR_WIDTH}
-              preferredSize={DEFAULT_SIDEBAR_WIDTH}
-            >
-              <FileExplorer />
-            </Allotment.Pane>
-            <Allotment.Pane>
-              editor view
-            </Allotment.Pane>
-          </Allotment>
+          {mounted && (
+            <Allotment defaultSizes={[DEFAULT_SIDEBAR_WIDTH, DEFAULT_MAIN_SIZE]}>
+              <Allotment.Pane
+                snap
+                minSize={MIN_SIDEBAR_WIDTH}
+                maxSize={MAX_SIDEBAR_WIDTH}
+                preferredSize={DEFAULT_SIDEBAR_WIDTH}
+              >
+                <FileExplorer />
+              </Allotment.Pane>
+              <Allotment.Pane>
+                <EditorView />
+              </Allotment.Pane>
+            </Allotment>
+          )}
         </div>
         <div className={cn(
           "absolute inset-0",
