@@ -235,3 +235,30 @@ export const useDeleteFile = () => {
     []
   );
 };
+
+/**
+ * Builds the full path to a file by traversing up the parent chain.
+ *
+ * Input:  A file ID (optional)
+ * Output: Array of ancestors from root to file: [{ id, name: "src" }, { id, name: "components" }, { id, name: "button.tsx" }]
+ *
+ * Used for: Breadcrumbs navigation (src > components > button.tsx)
+ */
+export const useFilePath = (fileId: string | null) => {
+  useFileStoreSubscription();
+
+  if (!fileId) return [];
+
+  const path: FileItem[] = [];
+  let currentId: string | undefined = fileId;
+
+  while (currentId) {
+    const file = getFileById(currentId);
+    if (!file) break;
+
+    path.unshift(file);
+    currentId = file.parentId;
+  }
+
+  return path;
+};

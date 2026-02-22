@@ -21,4 +21,8 @@ npm i allotment
 
 # File & Folder Icons: https://www.npmjs.com/package/@react-symbols/icons
 npm i @react-symbols/icons
+
+# https://codemirror.net
+npm i codemirror @codemirror/lang-javascript @codemirror/lang-html @codemirror/lang-css
+npm i @codemirror/theme-one-dark @codemirror/view
 ```
