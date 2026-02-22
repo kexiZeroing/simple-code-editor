@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef } from "react";
 
 import { getLanguageExtension } from "./extensions/language-extension";
 import { minimap } from "./extensions/minimap";
+// import { suggestion } from "./extensions/suggestion";
 
 interface Props {
   fileName: string;
@@ -37,6 +38,7 @@ export const CodeEditor = ({
         basicSetup,
         oneDark,
         languageExtension,
+        // suggestion(),
         keymap.of([indentWithTab]),
         minimap(),
         indentationMarkers(),

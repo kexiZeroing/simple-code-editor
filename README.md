@@ -26,6 +26,6 @@ npm i @react-symbols/icons
 
 # https://codemirror.net
 npm i codemirror @codemirror/lang-javascript @codemirror/lang-html @codemirror/lang-css @codemirror/lang-json @codemirror/lang-markdown
-npm i @codemirror/theme-one-dark @codemirror/view @codemirror/commands
+npm i @codemirror/theme-one-dark
 npm i @replit/codemirror-minimap @replit/codemirror-indentation-markers
 ```
