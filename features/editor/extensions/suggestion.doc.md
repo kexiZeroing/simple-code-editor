@@ -92,3 +92,42 @@ view.dispatch({
 ```
 
 That dispatch triggers `suggestionState`'s reducer, which updates the stored string, which causes the `ViewPlugin` to rebuild its decorations, which causes CodeMirror to re-render the widget after the cursor. The whole cycle is synchronous and driven by the transaction system rather than by manual DOM manipulation.
+
+### Building Context for AI Suggestions
+
+For an AI model to generate a useful inline suggestion, it needs more than just the character at the cursor. It needs to understand the surrounding code — what came before, what comes after, and where exactly the cursor sits within the current line. This function gathers all of that into a single payload object.
+
+```ts
+const generatePayload = (view: EditorView, fileName: string) => {
+  const code = view.state.doc.toString();
+  if (!code || code.trim().length === 0) return null;
+
+  const cursorPosition = view.state.selection.main.head;
+  const currentLine = view.state.doc.lineAt(cursorPosition);
+  const cursorInLine = cursorPosition - currentLine.from;
+
+  const previousLines: string[] = [];
+  const previousLinesToFetch = Math.min(5, currentLine.number - 1);
+  for (let i = previousLinesToFetch; i >= 1; i--) {
+    previousLines.push(view.state.doc.line(currentLine.number - i).text);
+  }
+
+  const nextLines: string[] = [];
+  const totalLines = view.state.doc.lines;
+  const linesToFetch = Math.min(5, totalLines - currentLine.number);
+  for (let i = 1; i <= linesToFetch; i++) {
+    nextLines.push(view.state.doc.line(currentLine.number + i).text);
+  }
+
+  return {
+    fileName,
+    code,
+    currentLine: currentLine.text,
+    previousLines: previousLines.join("\n"),
+    textBeforeCursor: currentLine.text.slice(0, cursorInLine),
+    textAfterCursor: currentLine.text.slice(cursorInLine),
+    nextLines: nextLines.join("\n"),
+    lineNumber: currentLine.number,
+  }
+};
+```

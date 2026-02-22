@@ -5,7 +5,8 @@ import {
     EditorView,
     ViewPlugin,
     ViewUpdate,
-    WidgetType
+    WidgetType,
+    keymap
 } from "@codemirror/view";
 
 const setSuggestionEffect = StateEffect.define<string | null>();
@@ -84,7 +85,28 @@ const renderPlugin = ViewPlugin.fromClass(
   { decorations: (plugin) => plugin.decorations }
 );
 
+const acceptSuggestionKeymap = keymap.of([
+  {
+    key: "Tab",
+    run: (view) => {
+      const suggestion = view.state.field(suggestionState);
+      if (!suggestion) {
+        return false;
+      }
+
+      const cursor = view.state.selection.main.head;
+      view.dispatch({
+        changes: { from: cursor, insert: suggestion },
+        selection: { anchor: cursor + suggestion.length }, // Move cursor to end
+        effects: setSuggestionEffect.of(null), // Clear the suggestion
+      });
+      return true;
+    },
+  },
+]);
+
 export const suggestion = () => [
   suggestionState,
   renderPlugin,
+  acceptSuggestionKeymap,
 ];

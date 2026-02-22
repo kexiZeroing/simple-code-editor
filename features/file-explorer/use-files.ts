@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 export type FileItem = {
   id: string;
-  creationTime: number;
   parentId?: string;
   name: string;
   type: 'file' | 'folder';
@@ -39,21 +38,18 @@ const initializeDefaultFiles = () => {
   const files: FileItem[] = [
     {
       id: srcFolderId,
-      creationTime: now,
       name: 'src',
       type: 'folder',
       updatedAt: now,
     },
     {
       id: componentsFolderId,
-      creationTime: now,
       name: 'components',
       type: 'folder',
       updatedAt: now,
     },
     {
       id: crypto.randomUUID(),
-      creationTime: now,
       parentId: srcFolderId,
       name: 'index.ts',
       type: 'file',
@@ -62,7 +58,6 @@ const initializeDefaultFiles = () => {
     },
     {
       id: crypto.randomUUID(),
-      creationTime: now,
       parentId: componentsFolderId,
       name: 'Button.tsx',
       type: 'file',
@@ -185,7 +180,6 @@ export const useCreateFile = () => {
 
       const newFile: FileItem = {
         id: id,
-        creationTime: now,
         parentId: args.parentId,
         name: args.name,
         type: 'file',
@@ -212,7 +206,6 @@ export const useCreateFolder = () => {
 
       const newFolder: FileItem = {
         id: id,
-        creationTime: now,
         parentId: args.parentId,
         name: args.name,
         type: 'folder',
