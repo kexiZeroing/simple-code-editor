@@ -26,6 +26,58 @@ const notifyListeners = () => {
   fileStore.listeners.forEach((listener) => listener());
 };
 
+/**
+ * Initialize fileStore with default folder and file structure
+ * This provides a helpful starting state without needing manual creation each time
+ */
+const initializeDefaultFiles = () => {
+  const now = Date.now();
+
+  const srcFolderId = crypto.randomUUID();
+  const componentsFolderId = crypto.randomUUID();
+
+  const files: FileItem[] = [
+    {
+      id: srcFolderId,
+      creationTime: now,
+      name: 'src',
+      type: 'folder',
+      updatedAt: now,
+    },
+    {
+      id: componentsFolderId,
+      creationTime: now,
+      name: 'components',
+      type: 'folder',
+      updatedAt: now,
+    },
+    {
+      id: crypto.randomUUID(),
+      creationTime: now,
+      parentId: srcFolderId,
+      name: 'index.ts',
+      type: 'file',
+      content: `export const hello = "world";`,
+      updatedAt: now,
+    },
+    {
+      id: crypto.randomUUID(),
+      creationTime: now,
+      parentId: componentsFolderId,
+      name: 'Button.tsx',
+      type: 'file',
+      content: `export const Button = () => <button>Click me</button>;`,
+      updatedAt: now,
+    },
+  ];
+
+  files.forEach((file) => {
+    fileStore.files.set(file.id, file);
+  });
+};
+
+initializeDefaultFiles();
+
 // Sort: folders first, then files, alphabetically within each group
 const sortFiles = <T extends { type: 'file' | 'folder'; name: string }>(
   files: T[]

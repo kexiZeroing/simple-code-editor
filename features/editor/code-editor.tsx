@@ -1,20 +1,30 @@
-import { javascript } from "@codemirror/lang-javascript";
+import { indentWithTab } from "@codemirror/commands";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { EditorView } from "@codemirror/view";
+import { EditorView, keymap } from "@codemirror/view";
+import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 import { basicSetup } from "codemirror";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
+
+import { getLanguageExtension } from "./extensions/language-extension";
+import { minimap } from "./extensions/minimap";
 
 interface Props {
   fileName: string;
   initialValue?: string;
+  onChange: (value: string) => void;
 }
 
 export const CodeEditor = ({ 
   fileName, 
   initialValue = "",
+  onChange,
 }: Props) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
+
+  const languageExtension = useMemo(() => {
+    return getLanguageExtension(fileName)
+  }, [fileName])
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -23,9 +33,18 @@ export const CodeEditor = ({
       doc: initialValue,
       parent: editorRef.current,
       extensions: [
+        // https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
         basicSetup,
         oneDark,
-        javascript({typescript: true}),
+        languageExtension,
+        keymap.of([indentWithTab]),
+        minimap(),
+        indentationMarkers(),
+        EditorView.updateListener.of((update) => {
+          if (update.docChanged) {
+            onChange(update.state.doc.toString());
+          }
+        })
       ],
     });
 

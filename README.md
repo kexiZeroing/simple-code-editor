@@ -1,8 +1,10 @@
 # Simple Code Editor
 
-A lightweight, modern code editor built with Next.js and React. Features a file explorer, split-pane layout, and dark mode support.
+Inspired by the tutorial ["Build and Deploy a Cursor Clone"](https://www.youtube.com/watch?v=Xf9rHPNBMyQ), this project extracts and simplifies the frontend portion into a minimal POC demonstrating how to implement a browser-based code editor.
 
-This is a frontend-only project. Data persists in browser memory only (no backend/database).
+It is a lightweight, modern code editor built with Next.js and React, featuring a file explorer sidebar, a CodeMirror editor with syntax highlighting, a split-pane layout, and dark mode support. 
+
+Note that it is frontend-only with no backend integration, which means all data is stored in browser memory and will be lost upon page refresh.
 
 ## Setup
 
@@ -23,6 +25,7 @@ npm i allotment
 npm i @react-symbols/icons
 
 # https://codemirror.net
-npm i codemirror @codemirror/lang-javascript @codemirror/lang-html @codemirror/lang-css
-npm i @codemirror/theme-one-dark @codemirror/view
+npm i codemirror @codemirror/lang-javascript @codemirror/lang-html @codemirror/lang-css @codemirror/lang-json @codemirror/lang-markdown
+npm i @codemirror/theme-one-dark @codemirror/view @codemirror/commands
+npm i @replit/codemirror-minimap @replit/codemirror-indentation-markers
 ```
