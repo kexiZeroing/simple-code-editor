@@ -28,4 +28,10 @@ npm i @react-symbols/icons
 npm i codemirror @codemirror/lang-javascript @codemirror/lang-html @codemirror/lang-css @codemirror/lang-json @codemirror/lang-markdown
 npm i @codemirror/theme-one-dark
 npm i @replit/codemirror-minimap @replit/codemirror-indentation-markers
+
+# https://github.com/xtermjs/xterm.js
+npm i @xterm/xterm @xterm/addon-fit
+
+# https://github.com/sindresorhus/execa
+npm i execa
 ```

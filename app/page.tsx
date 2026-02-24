@@ -6,9 +6,9 @@ export default function Home() {
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4">Welcome</h1>
         <p className="text-lg mb-6">
-          Go to{" "}
+          Go to the{" "}
           <Link href="/project" className="text-blue-500 hover:underline font-semibold">
-            project editor
+            online editor
           </Link>
         </p>
       </div>

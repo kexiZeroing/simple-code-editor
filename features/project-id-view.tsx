@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import { EditorView } from "@/features/editor/editor-view";
 import { FileExplorer } from "@/features/file-explorer";
+import { PreviewView } from "@/features/preview/preview-view";
 
 const MIN_SIDEBAR_WIDTH = 200;
 const MAX_SIDEBAR_WIDTH = 800;
@@ -83,7 +84,7 @@ export const ProjectIdView = () => {
           "absolute inset-0",
           activeView === "preview" ? "visible" : "invisible"
         )}>
-          preview here
+          <PreviewView />
         </div>
       </div>
     </div>
