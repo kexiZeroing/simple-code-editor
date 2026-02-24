@@ -8,10 +8,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid command" }, { status: 400 });
     }
 
-    const allowedCommands = [
-      "ls", "pwd", "cat", "echo", "date", "whoami", 
-      "mkdir", "touch", "rm", "cp", "mv",
-    ];
+    const allowedCommands = ["ls", "pwd", "cat", "echo", "date", "whoami"];
 
     const baseCommand = command.split(" ")[0];
 

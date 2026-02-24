@@ -35,3 +35,26 @@ npm i @xterm/xterm @xterm/addon-fit
 # https://github.com/sindresorhus/execa
 npm i execa
 ```
+
+## Deploy to Netlify
+
+The `@netlify/plugin-nextjs` package is what makes App Router API routes (app/api/...) work correctly.
+
+```sh
+npm install -D @netlify/plugin-nextjs
+```
+
+```toml
+[[plugins]]
+package = "@netlify/plugin-nextjs"
+
+[build]
+  command = "next build"
+  publish = ".next"
+```
+
+Push to GitHub, then on Netlify:
+1. Click Add new site → Import an existing project
+2. Connect GitHub → select your repo
+3. Netlify auto-detects Next.js. Build settings should auto-fill.
+4. Click Deploy
