@@ -9,12 +9,13 @@ import { CreateInput } from "./create-input";
 import { RenameInput } from "./rename-input";
 import { TreeItemWrapper } from "./tree-item-wrapper";
 import {
-    FileItem,
-    useCreateFile,
-    useCreateFolder,
-    useDeleteFile,
-    useFolderContents,
-    useRenameFile,
+  FileItem,
+  useCreateFile,
+  useCreateFolder,
+  useDeleteFile,
+  useFolderContents,
+  useLoadFileContent,
+  useRenameFile,
 } from "./use-files";
 
 export const Tree = ({
@@ -28,6 +29,7 @@ export const Tree = ({
   const [isRenaming, setIsRenaming] = useState(false);
   const [creating, setCreating] = useState<"file" | "folder" | null>(null);
 
+  const loadFileContent = useLoadFileContent();
   const renameFile = useRenameFile();
   const deleteFile = useDeleteFile();
   const createFile = useCreateFile();
@@ -72,6 +74,17 @@ export const Tree = ({
     setCreating(type);
   };
 
+  const handleFileOpen = async (pinned: boolean) => {
+    if (item.content === undefined) {
+      await loadFileContent(item.id, async () => {
+        const res = await fetch('/api/readme');
+        const data = await res.json();
+        return data.content;
+      });
+    }
+    openFile(item.id, { pinned });
+  };
+
   if (item.type === "file") {
     const fileName = item.name;
     const isActive = activeTabId === item.id;
@@ -93,8 +106,8 @@ export const Tree = ({
         item={item}
         level={level}
         isActive={isActive}
-        onClick={() => openFile(item.id, { pinned: false })}
-        onDoubleClick={() => openFile(item.id, { pinned: true })}
+        onClick={() => handleFileOpen(false)}
+        onDoubleClick={() => handleFileOpen(true)}
         onRename={() => setIsRenaming(true)}
         onDelete={() => {
           closeTab(item.id);

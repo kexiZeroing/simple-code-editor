@@ -31,11 +31,17 @@ const notifyListeners = () => {
  */
 const initializeDefaultFiles = () => {
   const now = Date.now();
-
   const srcFolderId = crypto.randomUUID();
   const componentsFolderId = crypto.randomUUID();
 
   const files: FileItem[] = [
+    {
+      id: 'readme',
+      name: 'README.md',
+      type: 'file',
+      content: undefined,
+      updatedAt: now,
+    },
     {
       id: srcFolderId,
       name: 'src',
@@ -279,6 +285,17 @@ export const useDeleteFile = () => {
     },
     []
   );
+};
+
+export const useLoadFileContent = () => {
+  return useCallback(async (id: string, fetcher: () => Promise<string>) => {
+    const file = getFileById(id);
+    if (!file || file.content !== undefined) return;
+
+    const content = await fetcher();
+    fileStore.files.set(id, { ...file, content });
+    notifyListeners();
+  }, []);
 };
 
 /**
